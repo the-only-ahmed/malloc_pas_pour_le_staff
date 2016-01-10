@@ -6,7 +6,7 @@
 /*   By: ael-kadh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/09 17:47:04 by ael-kadh          #+#    #+#             */
-/*   Updated: 2016/01/09 19:21:34 by ael-kadh         ###   ########.fr       */
+/*   Updated: 2016/01/10 22:49:52 by ael-kadh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,23 @@
 # define SMALL 's'
 # define LARGE 'l'
 
-# define TINY_S 500
+# define TINY_S 1024
 # define SMALL_S 4096
 
 # define TINY_M 150
 # define SMALL_M 500
 
 typedef struct	    s_block {
-    void	    *addr;
-    size_t	    size;
-    struct s_block  *next;
-    struct s_block  *prev;
+	void	    *addr;
+	size_t	    size;
+	struct s_block  *next;
+	struct s_block  *prev;
 }		    t_block;
 
 typedef struct	    s_malloc {
-    t_block         *tiny;
-    t_block         *small;
-    t_block         *large;
+	t_block         *tiny;
+	t_block         *small;
+	t_block         *large;
 }		    t_malloc;
 
 t_malloc g_memory;

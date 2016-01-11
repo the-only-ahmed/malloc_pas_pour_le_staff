@@ -3,16 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   malloc.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-kadh <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: ael-kadh <ael-kadh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2016/01/09 17:53:04 by ael-kadh          #+#    #+#             */
-/*   Updated: 2016/01/10 22:49:36 by ael-kadh         ###   ########.fr       */
+/*   Created: 2016/01/11 18:39:53 by ael-kadh          #+#    #+#             */
+/*   Updated: 2016/01/11 19:07:59 by ael-kadh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-void	*allocate(size_t size) {
+void			*allocate(size_t size)
+{
 	void	*ptr;
 
 	ptr = mmap(0, size, PROT_READ | PROT_WRITE, MAP_ANON | MAP_PRIVATE, -1, 0);
@@ -21,25 +22,43 @@ void	*allocate(size_t size) {
 	return (ptr);
 }
 
-#include <stdio.h>
+static void		*get_ptr(size_t size, t_block *block)
+{
+	while (block)
+	{
+		if (block->size == size && !block->isInUse)
+		{
+			block->isInUse = 1;
+			return (block->addr);
+		}
+		block = block->next;
+	}
+	return (NULL);
+}
 
-void	*malloc(size_t size) {
+static void		*check_if_exists(size_t size)
+{
 	void	*ptr;
 
-	write(1, "malloc : ", 9);
-	ft_putnbr_base(size, 10);
-	write(1, "\n", 1);
+	ptr = NULL;
 	if (size <= TINY_S)
-		ptr = getTinyOrSmall(TINY, size);
+		ptr = get_ptr(size, g_memory.tiny);
 	else if (size <= SMALL_S)
-		ptr = getTinyOrSmall(SMALL, size);
+		ptr = get_ptr(size, g_memory.small);
+	return (ptr);
+}
+
+void			*malloc(size_t size)
+{
+	void	*ptr;
+
+	if ((ptr = check_if_exists(size)) != NULL)
+		return (ptr);
+	if (size <= TINY_S)
+		ptr = get_tiny_or_small(TINY, size);
+	else if (size <= SMALL_S)
+		ptr = get_tiny_or_small(SMALL, size);
 	else
-		ptr = getLarge(size);
-	write(1, "malloc : ", 9);
-	ft_putnbr_base(size, 10);
-	write(1, " ==> ", 5);
-	if (ptr)
-		ft_putnbr_base((size_t)ptr, 16);
-	write(1, "\n", 1);
+		ptr = get_large(size);
 	return (ptr);
 }

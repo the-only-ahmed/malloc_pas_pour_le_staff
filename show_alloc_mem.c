@@ -1,7 +1,20 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   show_alloc_mem.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-kadh <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/01/11 19:10:46 by ael-kadh          #+#    #+#             */
+/*   Updated: 2016/01/11 19:12:00 by ael-kadh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 
-static void    show_block(t_block *block) {
-	size_t     size;
+static void		show_block(t_block *block)
+{
+	size_t		size;
 
 	size = block->size;
 	ft_putstr("0x");
@@ -13,19 +26,22 @@ static void    show_block(t_block *block) {
 	ft_putstr(" octets\n");
 }
 
-static size_t   show_memory(t_block *block, char *type) {
-	size_t    size;
+static size_t	show_memory(t_block *block, char *type)
+{
+	size_t		size;
 
 	size = 0;
 	ft_putstr(type);
-	if (!block) {
+	if (!block)
+	{
 		ft_putstr("is empty\n");
 		return (0);
 	}
 	ft_putstr("0x");
 	ft_putnbr_base((size_t)block->addr, 16);
 	write(1, "\n", 1);
-	while (block) {
+	while (block)
+	{
 		size += block->size;
 		show_block(block);
 		block = block->next;
@@ -33,8 +49,9 @@ static size_t   show_memory(t_block *block, char *type) {
 	return (size);
 }
 
-void    show_alloc_mem() {
-	size_t    total_size;
+void			show_alloc_mem(void)
+{
+	size_t		total_size;
 
 	total_size = 0;
 	total_size += show_memory(g_memory.tiny, "TINY : ");

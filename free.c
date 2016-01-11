@@ -6,16 +6,19 @@
 /*   By: ael-kadh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/09 19:07:13 by ael-kadh          #+#    #+#             */
-/*   Updated: 2016/01/10 22:28:08 by ael-kadh         ###   ########.fr       */
+/*   Updated: 2016/01/11 18:53:12 by ael-kadh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "malloc.h"
 
-t_block     *checkIfExists(void *ptr, t_block *block) {
-	while (block) {
-		if (ptr == block->addr) {
-			munmap(ptr, block->size);
+static t_block		*check_if_exists(void *ptr, t_block *block)
+{
+	while (block)
+	{
+		if (ptr == block->addr)
+		{
+			block->isInUse = 0;
 			return (block);
 		}
 		block = block->next;
@@ -23,49 +26,35 @@ t_block     *checkIfExists(void *ptr, t_block *block) {
 	return (NULL);
 }
 
-void        eraseBlock(t_block *tmp) {
+static void			erase_block(t_block *tmp)
+{
 	if (tmp->next)
 		tmp->next->prev = tmp->prev;
 	if (tmp->prev)
 		tmp->prev->next = tmp->next;
 }
 
-void		free(void *ptr) {
+void				free(void *ptr)
+{
 	t_block		*tmp;
 
-	write(1, "free ", 5);
-	if (ptr)
-		ft_putnbr_base((size_t)ptr, 16);
-	write(1, "\n", 1);
 	if (!ptr)
-		return;
-	if ((tmp = checkIfExists(ptr, g_memory.tiny)) != NULL) {
-		if (tmp == g_memory.tiny) {
-			g_memory.tiny = tmp->next;
-			if (g_memory.tiny)
-				g_memory.tiny->prev = NULL;
-		} else
-			eraseBlock(tmp);
-		munmap(tmp, sizeof(t_block));
-		return;
-	}
-	if ((tmp = checkIfExists(ptr, g_memory.small)) != NULL) {
-		if (tmp == g_memory.small) {
-			g_memory.small = tmp->next;
-			if (g_memory.small)
-				g_memory.small->prev = NULL;
-		} else
-			eraseBlock(tmp);
-		munmap(tmp, sizeof(t_block));
-		return;
-	}
-	if ((tmp = checkIfExists(ptr, g_memory.large)) != NULL) {
-		if (tmp == g_memory.large) {
+		return ;
+	if ((tmp = check_if_exists(ptr, g_memory.tiny)) != NULL)
+		return ;
+	if ((tmp = check_if_exists(ptr, g_memory.small)) != NULL)
+		return ;
+	if ((tmp = check_if_exists(ptr, g_memory.large)) != NULL)
+	{
+		munmap(ptr, tmp->size);
+		if (tmp == g_memory.large)
+		{
 			g_memory.large = tmp->next;
 			if (g_memory.large)
 				g_memory.large->prev = NULL;
-		} else
-			eraseBlock(tmp);
+		}
+		else
+			erase_block(tmp);
 		munmap(tmp, sizeof(t_block));
 	}
 }

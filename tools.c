@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   tools.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-kadh <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2016/01/11 19:12:18 by ael-kadh          #+#    #+#             */
+/*   Updated: 2016/01/11 19:12:48 by ael-kadh         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "malloc.h"
 
 void	*ft_memcpy(void *s1, const void *s2, size_t n)
 {
-	int		i;
-	char	*ss1;
+	int			i;
+	char		*ss1;
 	const char	*ss2;
 
 	i = 0;
@@ -20,7 +32,7 @@ void	*ft_memcpy(void *s1, const void *s2, size_t n)
 
 void	ft_putstr(char const *str)
 {
-	int	    i;
+	int		i;
 
 	i = 0;
 	while (str[i] != '\0')

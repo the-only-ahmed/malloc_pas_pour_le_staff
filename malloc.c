@@ -6,7 +6,7 @@
 /*   By: ael-kadh <ael-kadh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/11 18:39:53 by ael-kadh          #+#    #+#             */
-/*   Updated: 2016/01/11 19:07:59 by ael-kadh         ###   ########.fr       */
+/*   Updated: 2016/01/11 19:27:31 by ael-kadh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,9 +26,9 @@ static void		*get_ptr(size_t size, t_block *block)
 {
 	while (block)
 	{
-		if (block->size == size && !block->isInUse)
+		if (block->size == size && !block->is_in_use)
 		{
-			block->isInUse = 1;
+			block->is_in_use = 1;
 			return (block->addr);
 		}
 		block = block->next;

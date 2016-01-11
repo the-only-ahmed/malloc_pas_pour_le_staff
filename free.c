@@ -6,7 +6,7 @@
 /*   By: ael-kadh <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/09 19:07:13 by ael-kadh          #+#    #+#             */
-/*   Updated: 2016/01/11 18:53:12 by ael-kadh         ###   ########.fr       */
+/*   Updated: 2016/01/11 19:27:40 by ael-kadh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ static t_block		*check_if_exists(void *ptr, t_block *block)
 	{
 		if (ptr == block->addr)
 		{
-			block->isInUse = 0;
+			block->is_in_use = 0;
 			return (block);
 		}
 		block = block->next;

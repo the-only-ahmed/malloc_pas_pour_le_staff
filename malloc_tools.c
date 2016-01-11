@@ -6,7 +6,7 @@
 /*   By: ael-kadh <ael-kadh@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2016/01/09 18:32:58 by ael-kadh          #+#    #+#             */
-/*   Updated: 2016/01/11 19:28:58 by ael-kadh         ###   ########.fr       */
+/*   Updated: 2016/01/11 19:39:09 by ael-kadh         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void		*small(size_t size)
 	return (ptr);
 }
 
-t_block		*create_block(void *ptr, size_t size, char type)
+t_block		*create_block(void *ptr, char type)
 {
 	static void		*block_pool = NULL;
 	static int		used_pool = 0;
@@ -90,11 +90,14 @@ t_block		*create_block(void *ptr, size_t size, char type)
 	{
 		used_pool = 0;
 		block_pool = allocate(sizeof(t_block) * 1024);
+		if (block_pool == MAP_FAILED)
+			return (NULL);
 	}
 	block = &(block_pool[used_pool]);
 	used_pool += sizeof(t_block) + 1;
-	if (block == MAP_FAILED)
-		return (NULL);
+	block->is_in_use = 1;
+	block->next = NULL;
+	block->prev = NULL;
 	return (block);
 }
 
@@ -107,15 +110,11 @@ void		*get_tiny_or_small(char type, size_t size)
 	ptr = (type == TINY) ? tiny(size) : small(size);
 	if (!ptr)
 		return (NULL);
-	block = create_block(ptr, size, type);
-	block = (t_block*)allocate(sizeof(t_block));
+	block = create_block(ptr, type);
 	if (!block)
 		return (NULL);
 	block->addr = ptr;
 	block->size = size;
-	block->is_in_use = 1;
-	block->next = NULL;
-	block->prev = NULL;
 	if (!g_memory.tiny && type == TINY)
 		g_memory.tiny = block;
 	else if (!g_memory.small && type == SMALL)
